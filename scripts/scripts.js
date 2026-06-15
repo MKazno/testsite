@@ -118,6 +118,17 @@ function decorateButtons(main) {
 }
 
 /**
+ * Applies temporary homepage copy overrides while the tutorial content is still authored upstream.
+ * @param {Element} main The main element
+ */
+function decorateBrandGuidelinesTitle(main) {
+  const title = main.querySelector('h1#congrats-you-are-ready-to-go');
+  if (title?.textContent.trim() === 'Congrats, you are ready to go!!') {
+    title.textContent = 'Sky Brand Guidelines';
+  }
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -128,6 +139,7 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateBrandGuidelinesTitle(main);
 }
 
 /**
