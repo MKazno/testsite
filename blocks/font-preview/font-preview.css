@@ -1,0 +1,92 @@
+﻿.font-preview {
+  display: grid;
+  grid-template-columns: minmax(190px, 260px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+  padding: 24px 0;
+}
+
+.font-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.font-preview-list button {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  padding: 10px 12px;
+  color: var(--dark-color);
+  background: transparent;
+  font: inherit;
+  font-size: var(--body-font-size-s);
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.font-preview-list button:hover,
+.font-preview-list button:focus-visible {
+  color: var(--text-color);
+  background: var(--light-color);
+  outline: 0;
+}
+
+.font-preview-list button[aria-selected='true'] {
+  border-left-color: var(--link-color);
+  color: var(--text-color);
+  background: var(--light-color);
+}
+
+.font-preview-display {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.font-preview-name {
+  margin: 0;
+  color: var(--text-color);
+  font-size: clamp(42px, 8vw, 92px);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.font-preview-sample {
+  max-width: 760px;
+  margin: 24px 0 0;
+  color: var(--dark-color);
+  font-size: var(--body-font-size-m);
+}
+
+.font-preview-download {
+  display: inline-flex;
+  margin-top: 28px;
+  color: var(--link-color);
+  font-size: var(--body-font-size-s);
+  font-weight: 500;
+}
+
+.font-preview-download:hover,
+.font-preview-download:focus-visible {
+  color: var(--link-hover-color);
+}
+
+.font-preview-download[aria-disabled='true'] {
+  color: var(--dark-color);
+  pointer-events: none;
+}
+
+@media (width < 700px) {
+  .font-preview {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .font-preview-list {
+    border-bottom: 1px solid #dadada;
+    padding-bottom: 12px;
+  }
+}

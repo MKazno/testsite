@@ -1,0 +1,19 @@
+.test {
+  padding: 24px 0;
+}
+
+.test-eyebrow {
+  margin: 0 0 8px;
+  color: var(--link-color);
+  font-size: var(--body-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.test-message {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--heading-font-size-m);
+  line-height: 1.25;
+}
