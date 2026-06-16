@@ -2,7 +2,7 @@
 Your project's description...
 
 ## Environments
-- Preview: https://main--testsie--MKazno.aem.page/
+- Preview: https://main--testsite--MKazno.aem.page/
 - Live: https://main--testsite--MKazno.aem.live/
 
 ## Documentation
