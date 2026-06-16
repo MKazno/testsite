@@ -1,11 +1,9 @@
 ﻿const DEFAULT_FONTS = [
-  { name: 'Sky Text Regular', file: '/fonts/sky-text-regular.ttf', weight: '400', style: 'normal' },
-  { name: 'Sky Text Light', file: '/fonts/sky-text-light.ttf', weight: '300', style: 'normal' },
-  { name: 'Sky Text Italic', file: '/fonts/sky-text-italic.ttf', weight: '400', style: 'italic' },
-  { name: 'Sky Text Medium', file: '/fonts/sky-text-medium.ttf', weight: '500', style: 'normal' },
-  { name: 'Sky Text Bold', file: '/fonts/sky-text-bold.ttf', weight: '700', style: 'normal' },
-  { name: 'Sky Text Headline', file: '/fonts/sky-text-headline.ttf', weight: '700', style: 'normal' },
-  { name: 'Sky Text Headline Italic', file: '/fonts/sky-text-headline-italic.ttf', weight: '700', style: 'italic' },
+  { name: 'Sky Text Regular', file: '/fonts/SkyText/SkyTextVF_W_Rg.woff', weight: '400', style: 'normal' },
+  { name: 'Sky Text Light', file: '/fonts/SkyText/SkyTextVF_W_Lt.woff', weight: '300', style: 'normal' },
+  { name: 'Sky Text Medium', file: '/fonts/SkyText/SkyTextVF_W_Md.woff', weight: '500', style: 'normal' },
+  { name: 'Sky Text Bold', file: '/fonts/SkyText/SkyTextVF_W_Bd.woff', weight: '700', style: 'normal' },
+  { name: 'Sky Text Super Bold', file: '/fonts/SkyText/SkyTextVF_W_SBd.woff', weight: '800', style: 'normal' },
 ];
 
 function cleanText(value) {
@@ -18,11 +16,21 @@ function toFontId(name, index) {
 
 function resolveFontFile(value) {
   if (!value) return '';
-  try {
-    return new URL(value, window.location.href).href;
-  } catch (e) {
-    return value;
+  const trimmed = value.trim();
+
+  if (trimmed.startsWith('//') || /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(trimmed)) {
+    return trimmed;
   }
+
+  if (trimmed.startsWith('/')) {
+    return trimmed;
+  }
+
+  if (trimmed.startsWith('fonts/')) {
+    return `/${trimmed}`;
+  }
+
+  return `/fonts/${trimmed}`;
 }
 
 function fontFormat(file) {
@@ -79,7 +87,7 @@ function setSelected(buttons, preview, download, fonts, index) {
     button.tabIndex = buttonIndex === index ? 0 : -1;
   });
 
-  preview.style.fontFamily = `'${family}', var(--body-font-family), Arial, sans-serif`;
+  preview.style.fontFamily = `'${family}'`;
   preview.style.fontWeight = font.weight;
   preview.style.fontStyle = font.style;
   preview.textContent = font.name;
