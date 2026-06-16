@@ -1,84 +1,58 @@
 /**
- * Loads and decorates the hero-parallax block.
- * Expected content structure:
- * - Row 1: Background image (no parallax)
- * - Row 2: Floating element (parallax at 0.2)
+ * loads and decorates the hero-parallax block
  * @param {Element} block The block element
  */
 export default async function decorate(block) {
   const rows = Array.from(block.children);
 
-  // Row 1: Background image
+  if (rows.length < 2) return;
+
+  // Set block to relative positioning for absolute children
+  block.style.position = 'relative';
+  block.style.overflow = 'hidden';
+
+  // Background layer (Row 1) - static, takes up natural space
   const bgRow = rows[0];
-  const bgPicture = bgRow?.querySelector('picture');
-  const bgImg = bgRow?.querySelector('img');
+  bgRow.style.position = 'relative';
+  bgRow.style.width = '100%';
+  bgRow.style.zIndex = '1';
 
-  block.innerHTML = '';
-  const container = document.createElement('div');
-  container.className = 'hero-parallax-container';
-
-  // Background layer
-  if (bgPicture || bgImg) {
-    const bgLayer = document.createElement('div');
-    bgLayer.className = 'hero-parallax-bg';
-    if (bgPicture) {
-      bgLayer.appendChild(bgPicture.cloneNode(true));
-    } else if (bgImg) {
-      bgLayer.appendChild(bgImg.cloneNode(true));
-    }
-    container.appendChild(bgLayer);
-  }
-
-  // Row 2: Floating layer
-  const floatLayers = [];
+  // Floating layer (Row 2) - parallax effect, positioned absolutely over background
   const floatRow = rows[1];
-  if (floatRow) {
-    const floatLayer = document.createElement('div');
-    floatLayer.className = 'hero-parallax-float';
-    floatLayer.dataset.parallaxOffset = 0.2;
+  floatRow.style.position = 'absolute';
+  floatRow.style.top = '0';
+  floatRow.style.left = '0';
+  floatRow.style.width = '100%';
+  floatRow.style.zIndex = '2';
+  floatRow.style.willChange = 'transform';
 
-    const rowClone = floatRow.cloneNode(true);
-    while (rowClone.firstChild) {
-      floatLayer.appendChild(rowClone.firstChild.cloneNode(true));
-    }
+  let rafId = null;
+  const offsetMultiplier = 0.2;
 
-    container.appendChild(floatLayer);
-    floatLayers.push(floatLayer);
-  }
+  function updateParallax() {
+    const blockRect = block.getBoundingClientRect();
+    const blockTop = blockRect.top;
+    const blockHeight = blockRect.height;
 
-  block.appendChild(container);
-
-  // Parallax animation
-  if (floatLayers.length > 0) {
-    let rafId = null;
-
-    function updateParallax() {
-      const blockRect = block.getBoundingClientRect();
-      const blockTop = blockRect.top;
-      const blockHeight = blockRect.height;
+    // Only update if block is in viewport
+    if (blockTop < window.innerHeight && blockTop + blockHeight > 0) {
       const blockCenter = blockTop + blockHeight / 2;
       const viewportCenter = window.innerHeight / 2;
-
-      if (blockTop < window.innerHeight && blockTop + blockHeight > 0) {
-        const distanceFromCenter = blockCenter - viewportCenter;
-
-        floatLayers.forEach((layer) => {
-          const offsetMultiplier = parseFloat(layer.dataset.parallaxOffset);
-          const offset = distanceFromCenter * offsetMultiplier;
-          layer.style.transform = `translateY(${offset}px)`;
-        });
-      }
-
-      rafId = null;
+      const distanceFromCenter = blockCenter - viewportCenter;
+      const offset = distanceFromCenter * offsetMultiplier;
+      floatRow.style.transform = `translateY(${offset}px)`;
     }
 
-    function onScroll() {
-      if (!rafId) {
-        rafId = requestAnimationFrame(updateParallax);
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    updateParallax();
+    rafId = null;
   }
+
+  function onScroll() {
+    if (!rafId) {
+      rafId = requestAnimationFrame(updateParallax);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  updateParallax();
 }
+
